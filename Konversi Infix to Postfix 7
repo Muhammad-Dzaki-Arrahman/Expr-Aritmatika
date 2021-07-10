@@ -1,2 +1,18 @@
-#include <bits/stdc++.h>
+#include <iostream> 
+#include <ctype.h>
+#include <stack>
 using namespace std;
+long unsigned int i;
+
+bool isOp(char a){
+	if(a=='+'||a=='-'||a=='*'||a=='/'||a=='%')
+		return true;
+	return false;
+}
+int precedence(char a){
+	if(a=='+'||a=='-') return 1;
+	if(a=='*'||a=='/'||a=='%') return 2;
+	return 0;
+}
+string convert();
+// segera dilanjutkan
