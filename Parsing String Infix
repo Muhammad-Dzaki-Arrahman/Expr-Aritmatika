@@ -48,8 +48,12 @@ for (int p=0; p<Operator.length(); p++) {
             else if (!isdigit(Operator[p+1])){
                 cout << Operator[p] << " ";
             }
-        }
-        else
+        }else
             cout << Operator[p] << " ";
     }
 };
+int main () {
+    string Operator;
+    getline(cin,Operator);
+    PPKM_infixpostfix(Operator);
+}
