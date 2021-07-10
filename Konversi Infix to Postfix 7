@@ -14,5 +14,65 @@ int precedence(char a){
 	if(a=='*'||a=='/'||a=='%') return 2;
 	return 0;
 }
-string convert();
-// segera dilanjutkan
+string convert(string masukan){
+	stack<char> data;
+	string postfix="";
+	
+	for(i=0; i<masukan.length(); i++){
+		if(isdigit(masukan[i])){
+			while(i<masukan.length() && isdigit(masukan[i])){
+				postfix += masukan[i];
+				i++;
+			}
+			i--;
+			postfix += " ";
+		}
+		else if(masukan[i] == '(')
+			data.push(masukan[i]);
+		else if(masukan[i] == ')'){
+			while(!data.empty() && data.top() != '('){
+				postfix += data.top();
+				postfix += " ";
+				data.pop();
+			}
+			data.pop();
+		} else {
+			if(masukan[i] == '-'){
+				if(i==0){
+					if(isdigit(masukan[i+1])){
+						postfix += masukan[i];
+						i++;
+						while(i<masukan.length() && isdigit(masukan[i])){
+							postfix += masukan[i];
+							i++;
+						}
+						i--;
+						postfix += " ";
+					}
+					else{
+						postfix += "-1 ";
+						data.push('*');
+					}
+				} else {
+					while(!data.empty() && precedence(data.top()) >= precedence(masukan[i]) && !isOp(masukan[i-1])){
+						postfix += data.top();
+						postfix += " ";
+						data.pop();
+					}
+					if((isdigit(masukan[i+1]) || masukan[i+1]=='(') && (isdigit(masukan[i-1]) || masukan[i-1]==')'))
+						data.push(masukan[i]);
+					else {
+						postfix += "-1 ";
+						data.push('*');
+					}
+				}
+			} else {
+				while(!data.empty() && precedence(data.top()) >= precedence(masukan[i])){
+					postfix += data.top();
+					postfix += " ";
+					data.pop();
+				}
+				data.push(masukan[i]);
+			}
+		}
+	}
