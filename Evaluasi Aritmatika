@@ -11,6 +11,7 @@ bool isOperator(char x){
     }
 }
 
+
 int putFirst(string x){
     if(x == "+" || x == "-"){
         return 1;
@@ -32,21 +33,18 @@ bool large(string x, string y){
 double run (double x, double y, string n){
     if(n == "+"){
         return x+y;
-    }
-    else if(n == "-"){
+    }else if(n == "-"){
         return x-y;
-    }
-    else if(n == "*"){
+    }else if(n == "*"){
         return x*y;
-    }
-    else if(n == "/"){
+    }else if(n == "/"){
         return x/y;
-    }
-    else if(n == "%"){
+    }else if(n == "%"){
         return (int) x % (int) y;
     }
     return 0;
 }
+
 
 vector <string> infix;
 vector <string> postfix;
@@ -57,13 +55,13 @@ vector <string>::iterator iter;
 
 void input(){
     string str;
-    char dam;
-    while(cin.get(dam)){
-        if(dam == '\n'){
+    char n;
+    while(cin.get(n)){
+        if(n == '\n'){
             break;
         }
-        if(dam != ' '){
-            str.push_back(dam);
+        if(n != ' '){
+            str.push_back(n);
         }
     }
     int length = str.length();
@@ -101,8 +99,9 @@ void input(){
     }
 }
 
+
 void toPostfix(){
-    stack <string> lipan;
+    stack <string> a;
     int i = 0;
     for(itr = infix.begin(); itr != infix.end() ; itr++, i++){
         if(isdigit(infix[i].back())){
@@ -110,38 +109,61 @@ void toPostfix(){
             continue;
         }
         if(infix[i] == "("){
-            lipan.push(infix[i]);
+            a.push(infix[i]);
             continue;
         }
         if(infix[i] == ")"){
-            while(!lipan.empty() && (lipan.top() != "(")){
-                string toPush = lipan.top();
+            while(!a.empty() && (a.top() != "(")){
+                string toPush = a.top();
                 postfix.push_back(toPush);
-                lipan.pop();
-            }
-            lipan.pop();
+                a.pop();
+            }a.pop();
             continue;
         }
         if(isOperator(infix[i][0])){
-            if(lipan.empty() || lipan.top() == "("){
-                lipan.push(infix[i]);
-            }
-            else{
-                while(!lipan.empty() && (lipan.top() != "(") && 
-                      large(infix[i], lipan.top())){
-                    string toPush = lipan.top();
+            if(a.empty() || a.top() == "("){
+                a.push(infix[i]);
+            }else{
+                while(!a.empty() && (a.top() != "(") && 
+                    large(infix[i], a.top())){
+                    string toPush = a.top();
                     postfix.push_back(toPush);
-                    lipan.pop();
-                }
-                lipan.push(infix[i] );
+                    a.pop();
+                }a.push(infix[i] );
             }
             continue;
         }
     }
-    while(!lipan.empty()){
-        string toPush = lipan.top();
+    while(!a.empty()){
+        string toPush = a.top();
         postfix.push_back(toPush);
-        lipan.pop();
+        a.pop();
     }
 }
-//lanjutin deni
+void result(){
+    stack <string> a;
+    int i = 0;
+    double res;
+    for(iter = postfix.begin(); iter != postfix.end() ; iter++, i++){
+        if(isdigit(postfix[i].back())){
+            a.push(postfix[i]);
+        }
+        else{
+            double A = strtod((a.top()).c_str(), NULL);
+            a.pop();
+            double B = strtod((a.top()).c_str(), NULL);
+            a.pop();
+            res = run(B, A, postfix[i]);
+            a.push(to_string(res));
+        }
+    }
+    res = strtod((a.top()).c_str(), NULL);
+    cout << res << endl;
+}
+
+
+int main(){
+    input();
+    toPostfix();
+    result();
+}
