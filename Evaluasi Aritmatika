@@ -101,7 +101,7 @@ void input(){
 
 
 void toPostfix(){
-    stack <string> a;
+    stack <string> value;
     int i = 0;
     for(itr = infix.begin(); itr != infix.end() ; itr++, i++){
         if(isdigit(infix[i].back())){
@@ -109,55 +109,55 @@ void toPostfix(){
             continue;
         }
         if(infix[i] == "("){
-            a.push(infix[i]);
+            value.push(infix[i]);
             continue;
         }
         if(infix[i] == ")"){
-            while(!a.empty() && (a.top() != "(")){
-                string toPush = a.top();
+            while(!value.empty() && (value.top() != "(")){
+                string toPush = value.top();
                 postfix.push_back(toPush);
-                a.pop();
-            }a.pop();
+                value.pop();
+            }value.pop();
             continue;
         }
         if(isOperator(infix[i][0])){
-            if(a.empty() || a.top() == "("){
-                a.push(infix[i]);
+            if(value.empty() || value.top() == "("){
+                value.push(infix[i]);
             }else{
-                while(!a.empty() && (a.top() != "(") && 
-                    large(infix[i], a.top())){
-                    string toPush = a.top();
+                while(!value.empty() && (value.top() != "(") && 
+                    large(infix[i], value.top())){
+                    string toPush = value.top();
                     postfix.push_back(toPush);
-                    a.pop();
-                }a.push(infix[i] );
+                    value.pop();
+                }value.push(infix[i] );
             }
             continue;
         }
     }
-    while(!a.empty()){
-        string toPush = a.top();
+    while(!value.empty()){
+        string toPush = value.top();
         postfix.push_back(toPush);
-        a.pop();
+        value.pop();
     }
 }
 void result(){
-    stack <string> a;
+    stack <string> value;
     int i = 0;
     double res;
     for(iter = postfix.begin(); iter != postfix.end() ; iter++, i++){
         if(isdigit(postfix[i].back())){
-            a.push(postfix[i]);
+            value.push(postfix[i]);
         }
         else{
-            double A = strtod((a.top()).c_str(), NULL);
-            a.pop();
-            double B = strtod((a.top()).c_str(), NULL);
-            a.pop();
+            double A = strtod((value.top()).c_str(), NULL);
+            value.pop();
+            double B = strtod((value.top()).c_str(), NULL);
+            value.pop();
             res = run(B, A, postfix[i]);
-            a.push(to_string(res));
+            value.push(to_string(res));
         }
     }
-    res = strtod((a.top()).c_str(), NULL);
+    res = strtod((value.top()).c_str(), NULL);
     cout << res << endl;
 }
 
